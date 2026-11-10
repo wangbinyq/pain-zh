@@ -4,9 +4,7 @@ import { book, chapters } from "../data/chapters.js";
 import { translatedChapters } from "../lib/book.js";
 
 const base = import.meta.env.BASE_URL;
-const slugSet = new Set(chapters.map((c) => c.slug));
 const done = new Set(translatedChapters().map((c) => c.slug));
-void slugSet;
 ---
 
 <Base>
@@ -20,10 +18,12 @@ void slugSet;
       <small>{book.authorEn} · {book.year}</small>
     </p>
 
+    <div id="resume-card" class="resume-card" hidden></div>
+
     <ol class="toc">
       {
         chapters.map((c) => (
-          <li>
+          <li data-slug={c.slug}>
             {done.has(c.slug) ? (
               <a href={`${base}${c.slug}/`}>
                 <span class="num">{c.num}</span>
@@ -40,6 +40,10 @@ void slugSet;
         ))
       }
     </ol>
+
+    <script>
+      import "../scripts/index-progress.js";
+    </script>
 
     <p class="note">
       中文译文由机器翻译完成，供学习与阅读参考，与原著出版方无关。原文版权归 Patrick D. Wall 与哥伦比亚大学出版社所有。

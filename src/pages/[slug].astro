@@ -25,7 +25,8 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
     <button id="toggle-en" type="button" aria-pressed="false">原文</button>
   </header>
 
-  <main>
+  <main data-slug={meta.slug} data-title={meta.title} data-num={meta.num}>
+    <div id="resume" class="resume" hidden></div>
     {label && <p class="kicker">{label}</p>}
     <h1>{meta.title}</h1>
     <p class="orig-title">{meta.titleEn}</p>
@@ -44,7 +45,7 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
           if (b.type === "h2") {
             return (
               <>
-                <h2>
+                <h2 id={`b-${idx}`} data-anchor={idx}>
                   {b.zh ?? b.en}
                   {b.zh && <span class="en">{b.en}</span>}
                 </h2>
@@ -57,7 +58,7 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
             return (
               <>
                 {figs}
-                <p class="block figcap">
+                <p id={`b-${idx}`} class="block figcap" data-anchor={idx}>
                   {b.zh ?? b.en}
                   {b.zh && <span class="en">{b.en}</span>}
                 </p>
@@ -67,7 +68,7 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
 
           return (
             <>
-              <div class="block">
+              <div id={`b-${idx}`} class="block" data-anchor={idx}>
                 <p class={b.zh ? "zh" : "standalone-en"} lang={b.zh ? "zh-CN" : "en"}>
                   {b.zh ?? b.en}
                 </p>
@@ -101,6 +102,8 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
   </main>
 
   <script>
+    import "../scripts/chapter-progress.js";
+
     const KEY = "pain-zh:show-en";
     const btn = document.getElementById("toggle-en");
     const set = (on: boolean) => {
