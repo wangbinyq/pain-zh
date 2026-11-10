@@ -22,8 +22,7 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
   <header class="bar">
     <a href={base}>目录</a>
     <span class="bar-title">{meta.title}</span>
-    <button id="font-size" type="button" aria-label="调整字号">字·中</button>
-    <button id="toggle-en" type="button" aria-pressed="false">原文</button>
+    <button id="open-settings" type="button">设置</button>
   </header>
 
   <main data-slug={meta.slug} data-title={meta.title} data-num={meta.num}>
@@ -102,38 +101,30 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
     </nav>
   </main>
 
+  <dialog id="settings" class="sheet">
+    <div class="sheet-head">
+      <h2>阅读设置</h2>
+      <button type="button" class="sheet-close" data-close aria-label="关闭">×</button>
+    </div>
+
+    <p class="sheet-label">字号</p>
+    <div class="seg" id="font-seg">
+      <button type="button" data-font="0">中</button>
+      <button type="button" data-font="1">大</button>
+      <button type="button" data-font="2">特大</button>
+    </div>
+
+    <label class="sheet-row">
+      <span>显示英文原文</span>
+      <input type="checkbox" id="show-en" />
+      <span class="switch" aria-hidden="true"></span>
+    </label>
+  </dialog>
+
   <script>
     import "../scripts/chapter-progress.js";
-    import { cycleFontSize, applyFontSize } from "../scripts/font-size.js";
+    import { initSettings } from "../scripts/settings.js";
 
-    applyFontSize();
-    const sizeBtn = document.getElementById("font-size");
-    if (sizeBtn) {
-      const label = () => {
-        sizeBtn.textContent = `字·${cycleFontSize.current()}`;
-      };
-      label();
-      sizeBtn.addEventListener("click", () => {
-        cycleFontSize();
-        label();
-      });
-    }
-
-    const KEY = "pain-zh:show-en";
-    const btn = document.getElementById("toggle-en");
-    const set = (on: boolean) => {
-      document.documentElement.classList.toggle("show-en", on);
-      btn?.setAttribute("aria-pressed", String(on));
-    };
-    try {
-      set(localStorage.getItem(KEY) === "1");
-    } catch {}
-    btn?.addEventListener("click", () => {
-      const on = !document.documentElement.classList.contains("show-en");
-      set(on);
-      try {
-        localStorage.setItem(KEY, on ? "1" : "0");
-      } catch {}
-    });
+    initSettings();
   </script>
 </Base>
