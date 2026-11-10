@@ -1,0 +1,121 @@
+---
+import Base from "../layouts/Base.astro";
+import { chapters } from "../data/chapters.js";
+import { loadChapter, translatedChapters } from "../lib/book.js";
+
+export function getStaticPaths() {
+  return translatedChapters().map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const { meta, blocks } = loadChapter(slug);
+const base = import.meta.env.BASE_URL;
+const i = chapters.findIndex((c) => c.slug === slug);
+const prev = chapters[i - 1];
+const next = chapters[i + 1];
+const doneSet = new Set(translatedChapters().map((c) => c.slug));
+
+const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${meta.num} 章`;
+---
+
+<Base>
+  <header class="bar">
+    <a href={base}>目录</a>
+    <span class="bar-title">{meta.title}</span>
+    <button id="toggle-en" type="button" aria-pressed="false">原文</button>
+  </header>
+
+  <main>
+    {label && <p class="kicker">{label}</p>}
+    <h1>{meta.title}</h1>
+    <p class="orig-title">{meta.titleEn}</p>
+
+    <article>
+      {
+        blocks.map((b, idx) => {
+          const figs = b.images.length ? (
+            <figure>
+              {b.images.map((src) => (
+                <img src={`${base}figures/${src}`} alt="" loading="lazy" />
+              ))}
+            </figure>
+          ) : null;
+
+          if (b.type === "h2") {
+            return (
+              <>
+                <h2>
+                  {b.zh ?? b.en}
+                  {b.zh && <span class="en">{b.en}</span>}
+                </h2>
+                {figs}
+              </>
+            );
+          }
+
+          if (b.type === "figcap") {
+            return (
+              <>
+                {figs}
+                <p class="block figcap">
+                  {b.zh ?? b.en}
+                  {b.zh && <span class="en">{b.en}</span>}
+                </p>
+              </>
+            );
+          }
+
+          return (
+            <>
+              {figs}
+              <div class="block">
+                <p class={b.zh ? "zh" : "standalone-en"} lang={b.zh ? "zh-CN" : "en"}>
+                  {b.zh ?? b.en}
+                </p>
+                {b.zh && <p class="en" lang="en">{b.en}</p>}
+              </div>
+            </>
+          );
+        })
+      }
+    </article>
+
+    <nav class="pager">
+      {
+        prev && doneSet.has(prev.slug) && (
+          <a href={`${base}${prev.slug}/`}>
+            <span class="dir">上一章</span>
+            {prev.title}
+          </a>
+        )
+      }
+      {
+        next && doneSet.has(next.slug) && (
+          <a class="next" href={`${base}${next.slug}/`}>
+            <span class="dir">下一章</span>
+            {next.title}
+          </a>
+        )
+      }
+    </nav>
+  </main>
+
+  <script>
+    const KEY = "pain-zh:show-en";
+    const btn = document.getElementById("toggle-en");
+    const set = (on: boolean) => {
+      document.documentElement.classList.toggle("show-en", on);
+      btn?.setAttribute("aria-pressed", String(on));
+    };
+    try {
+      set(localStorage.getItem(KEY) === "1");
+    } catch {}
+    btn?.addEventListener("click", () => {
+      const on = !document.documentElement.classList.contains("show-en");
+      set(on);
+      try {
+        localStorage.setItem(KEY, on ? "1" : "0");
+      } catch {}
+    });
+  </script>
+</Base>

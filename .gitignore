@@ -1,0 +1,4 @@
+node_modules/
+dist/
+.astro/
+TRANSLATION-SPEC.md
