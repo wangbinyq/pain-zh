@@ -4,7 +4,7 @@
   --muted: #8a8377;
   --rule: #ded7c9;
   --accent: #9a3b2f;
-  --measure: 34rem;
+  --measure: 32rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,9 +29,11 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
-  font-size: 17px;
-  line-height: 1.85;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-size: var(--fs, 18px);
+  line-height: 1.95;
+  letter-spacing: 0.012em;
   overflow-wrap: break-word;
 }
 
@@ -96,10 +98,10 @@ main {
 
 h1 {
   margin: 0;
-  font-size: 1.6rem;
-  line-height: 1.4;
+  font-size: 1.55rem;
+  line-height: 1.45;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .orig-title {
@@ -114,7 +116,7 @@ article p {
 }
 
 article .block {
-  margin: 0 0 1.15rem;
+  margin: 0 0 1.05rem;
 }
 
 article .zh {
@@ -122,10 +124,10 @@ article .zh {
 }
 
 article h2 {
-  margin: 2.6rem 0 1rem;
-  font-size: 1.12rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  margin: 2.8rem 0 1rem;
+  font-size: 1.06rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 article h2 .en {
@@ -161,8 +163,9 @@ figure img {
   display: none;
   margin-top: 0.35rem;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.84rem;
-  line-height: 1.6;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  letter-spacing: 0;
   color: var(--muted);
   text-indent: 0;
 }
@@ -215,8 +218,9 @@ figure img {
 }
 
 .cover h1 {
-  font-size: 2.6rem;
-  letter-spacing: 0.06em;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
 }
 
 .cover .sub {
@@ -228,9 +232,10 @@ figure img {
 
 .cover .en-title {
   margin: 1.4rem 0 0;
-  font-family: Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-size: 0.95rem;
+  letter-spacing: 0;
   color: var(--muted);
 }
 

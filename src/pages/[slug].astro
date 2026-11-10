@@ -22,6 +22,7 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
   <header class="bar">
     <a href={base}>目录</a>
     <span class="bar-title">{meta.title}</span>
+    <button id="font-size" type="button" aria-label="调整字号">字·中</button>
     <button id="toggle-en" type="button" aria-pressed="false">原文</button>
   </header>
 
@@ -103,6 +104,20 @@ const label = meta.slug === "preface" || meta.slug === "epilogue" ? "" : `第 ${
 
   <script>
     import "../scripts/chapter-progress.js";
+    import { cycleFontSize, applyFontSize } from "../scripts/font-size.js";
+
+    applyFontSize();
+    const sizeBtn = document.getElementById("font-size");
+    if (sizeBtn) {
+      const label = () => {
+        sizeBtn.textContent = `字·${cycleFontSize.current()}`;
+      };
+      label();
+      sizeBtn.addEventListener("click", () => {
+        cycleFontSize();
+        label();
+      });
+    }
 
     const KEY = "pain-zh:show-en";
     const btn = document.getElementById("toggle-en");
